@@ -5,7 +5,7 @@ import java.util.*;
 
 public class StorePanel extends JPanel
  {
-   public ArrayList pathList;
+   private ArrayList pathList;
    private JButton add, restart, process;
    private JPanel tools, console;
    private JLabel msg, activity, duration, pred;
@@ -84,21 +84,6 @@ public class StorePanel extends JPanel
 		 dur = durationF.getText();
 		 String pre_text = predF.getText();
 		 
-		 if (event.getSource() == process) //IF THE USER HITS process
-			{
-			 String[] activities = new String[pathList.size()];
-			 for(int i = 0; i < pathList.size(); i++) {
-				 Activity temp_activity = (Activity) pathList.get(i);
-				 activities[i] = temp_activity.getActivity();
-			 }
-			 Network temp = new Network(activities);
-			 
-			 processes = new JFrame("Processed Paths");
-			 processes.setVisible(true);
-			 processes.setSize(300, 300);
-	
-			} 
-		 
 		 if (event.getSource() == restart) //IF THE USER HITS restart
 			{
 
@@ -153,6 +138,14 @@ public class StorePanel extends JPanel
 		 msg.setVisible(true);
 	 }
   }
+		 
+		 if (event.getSource() == process) //IF THE USER HITS process
+			{
+			 processes = new JFrame("Processed Paths");
+			 processes.setVisible(true);
+			 processes.setSize(300, 300);
+	
+			} 
 }
 }
 }
