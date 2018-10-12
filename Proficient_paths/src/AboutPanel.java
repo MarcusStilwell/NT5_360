@@ -33,3 +33,4 @@ public class AboutPanel extends JPanel
 		      about.setEditable(false);
 	}
 }
+

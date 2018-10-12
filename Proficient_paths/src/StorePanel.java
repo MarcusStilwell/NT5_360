@@ -91,7 +91,8 @@ public class StorePanel extends JPanel
 				reset = true;
 				info.setText("");
 			}
-		// Checks if input activity has the same name as existing activity, set bool
+		 
+		 // Checks if input activity has the same name as existing activity, set bool
 		 for(int i = 0; i < pathList.size(); i++)
 		 {
 		 	 if(act.equals(((Activity) pathList.get(i)).getActivity()))

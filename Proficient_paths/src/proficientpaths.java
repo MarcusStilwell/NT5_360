@@ -18,10 +18,6 @@ public class proficientpaths extends JApplet
      //list of paths to be used in every panel
      pathList = new ArrayList();
 
-
-
-     //store inventory panel uses the list of computers and also
-     //established a connection with purchasePanel
      storePanel = new StorePanel(pathList);
      
      aboutPanel = new AboutPanel();
@@ -32,7 +28,6 @@ public class proficientpaths extends JApplet
      //create a tabbed pane with two tabs
      tPane = new JTabbedPane();
      tPane.addTab("Store Activities", storePanel);
-     //tPane.addTab("Path List", pathPanel);
      tPane.addTab("About", aboutPanel);
      tPane.addTab("Help", helpPanel);
 
