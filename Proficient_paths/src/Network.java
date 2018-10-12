@@ -28,6 +28,8 @@ public class Network {
    
    ArrayList<String[]> bigList;
    
+   boolean cycle;
+   
    int pathList_size;
    
    public Network (String[] activities) {
@@ -39,6 +41,7 @@ public class Network {
 			   adj_list.add(temp);
 		   }
 		   bigList = new ArrayList<String[]>();
+		   cycle = false;
    }
    public void set_edge(String to, String from) {
 	   for(int i = 0; i < n_size; i++) {
@@ -64,6 +67,9 @@ public class Network {
 	   
    }
    public void get_paths_help(String s, String d, ArrayList<String> visited, String[] pathList, int pathListsize) {
+	   if (cycle == true) {
+		   return;
+	   }
 	   visited.add(s);
 	   System.out.println(s);
 	   System.out.println(d);
@@ -91,6 +97,10 @@ public class Network {
 				   get_paths_help(i, d, visited, pathList, pathListsize);
 				   System.out.println("bigList after size: " + bigList.size());
 				   pathListsize -= 1;
+			   }else {
+				   cycle = true;
+				   bigList = new ArrayList<String[]>();
+				   return;
 			   }
 			   visited.remove(visited.size()-1);
 			   System.out.println("pathList size: " + bigList.get(0).length);
@@ -98,14 +108,20 @@ public class Network {
 	   }
 	   
    }
-   public String getEnd() {
+   public ArrayList<String> getEnd() {
 	   ArrayList<String> result = new ArrayList<String>();
 	   for(int i = 0; i < n_size; i++) {
 		   if(adj_list.get(i).next.size() == 0) {
-			   return adj_list.get(i).name;
+			   result.add(adj_list.get(i).name);
 		   }
 	   }
-	   return "error";
+	   if(result.size() > 0) {
+		   return result;
+	   }else {
+		   cycle = true;
+		   result.add("error");
+		   return result;
+	   }
    }
    
    
