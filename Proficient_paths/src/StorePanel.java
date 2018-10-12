@@ -6,7 +6,7 @@ import java.util.*;
 public class StorePanel extends JPanel
  {
    private ArrayList pathList;
-   private JButton add, restart, process;
+   private JButton add, restart, process, exit;
    private JPanel tools, console;
    private JLabel msg, activity, duration, pred;
    private JTextField activityF, durationF, predF;
@@ -41,6 +41,9 @@ public class StorePanel extends JPanel
       
       restart = new JButton("Restart");
       restart.addActionListener(new ButtonListener());
+      
+      exit = new JButton("Exit");
+      exit.addActionListener(new ButtonListener());
    
       tools=new JPanel();   //adding the labels and text fields to the panel
       tools.setLayout(new GridLayout(5, 2));
@@ -59,6 +62,7 @@ public class StorePanel extends JPanel
       console.add(add);
       console.add(restart);
       console.add(process);
+      console.add(exit);
 
       info=new JTextArea(); //area where user can see activities added
       info.setText("No Activities");
@@ -83,6 +87,11 @@ public class StorePanel extends JPanel
          act = activityF.getText();
 		 dur = durationF.getText();
 		 String pre_text = predF.getText();
+		 
+		 if (event.getSource() == exit)
+		 {
+		 	System.exit(0);
+		 }
 		 
 		 if (event.getSource() == restart) //IF THE USER HITS restart
 			{
