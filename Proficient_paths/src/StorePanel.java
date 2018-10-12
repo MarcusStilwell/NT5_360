@@ -7,12 +7,13 @@ public class StorePanel extends JPanel
  {
    private ArrayList pathList;
    private PathPanel pathPanel;
-   private JButton add, restart;
+   private JButton add, restart, process;
    private JPanel tools, console;
    private JLabel msg, activity, duration, pred;
    private JTextField activityF, durationF, predF;
    private JScrollPane scroll;
    private JTextArea info;
+   private JFrame processes;
    
    boolean reset;
 
@@ -37,9 +38,12 @@ public class StorePanel extends JPanel
       add=new JButton("Add");   //the button the user will push to add the activity to the list
       add.addActionListener(new ButtonListener());
       
+      process = new JButton("Process");
+      process.addActionListener(new ButtonListener());
+      
       restart = new JButton("Restart");
       restart.addActionListener(new ButtonListener());
-
+   
       tools=new JPanel();   //adding the labels and text fields to the panel
       tools.setLayout(new GridLayout(5, 2));
       tools.add(activity);
@@ -56,6 +60,7 @@ public class StorePanel extends JPanel
       console.add(tools);
       console.add(add);
       console.add(restart);
+      console.add(process);
 
       info=new JTextArea(); //area where user can see activities added
       info.setText("No Activities");
@@ -79,7 +84,7 @@ public class StorePanel extends JPanel
          Activity activ=new Activity();
          act = activityF.getText();
 		 dur = durationF.getText();
-		 pre = predF.getText();
+		 String pre_text = predF.getText();
 		 
 		 if (event.getSource() == restart) //IF THE USER HITS restart
 			{
@@ -100,7 +105,7 @@ public class StorePanel extends JPanel
 			 {
 				 activ.setActivity(act);
 				 activ.setDuration(Double.parseDouble(dur));
-				 activ.setPred(pre);
+				 activ.setPred(pre_text);
 				 if((info.getText()).equalsIgnoreCase("No Activities"))
 				 {
 					 info.setText("");
@@ -120,6 +125,14 @@ public class StorePanel extends JPanel
 		 msg.setVisible(true);
 	 }
   }
+		 
+		 if (event.getSource() == process) //IF THE USER HITS process
+			{
+			 processes = new JFrame("Processed Paths");
+			 processes.setVisible(true);
+			 processes.setSize(300, 300);
+	
+			} 
 }
 }
 }

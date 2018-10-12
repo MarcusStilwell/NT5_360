@@ -34,7 +34,7 @@ public class proficientpaths extends JApplet
      //create a tabbed pane with two tabs
      tPane = new JTabbedPane();
      tPane.addTab("Store Activities", storePanel);
-     tPane.addTab("Path List", pathPanel);
+     //tPane.addTab("Path List", pathPanel);
      tPane.addTab("About", aboutPanel);
      tPane.addTab("Help", helpPanel);
 

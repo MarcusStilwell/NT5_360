@@ -1,11 +1,12 @@
 //to use NumberFormat class
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class Activity
 {
     private String activity;
     private double duration;
-    private String pred;
+    private String[] pred;
   
 
     /************************************************************************
@@ -15,7 +16,7 @@ public class Activity
     {
         activity = "?";
         duration = 0.00;
-        pred = "?";
+        pred = new String[0];
          
     }
 
@@ -33,7 +34,7 @@ public class Activity
         return duration;
     }
 
-    public String getPred()
+    public String[] getPred()
     {
         return pred;
     }
@@ -50,16 +51,22 @@ public class Activity
 
     public void setPred(String predecessors)
     {
-        pred = predecessors;
+        pred = predecessors.split(",");
     }
 
     public String toString()
     {
         NumberFormat fmt = NumberFormat.getCurrencyInstance();
         String result;
-        result = "\nActivity:\t" + activity +
+        String pred_text = "";
+        for(int i =0; i < pred.length-1; i++) {
+        	pred_text += pred[i];
+        	pred_text += ", ";
+        }
+        pred_text += pred[pred.length-1];
+        result = "\nActivity:\t\t" + activity +
                  "\nDuration:\t\t" + duration +
-                 "\nPredecessors:\t\t" + pred + "\n\n";
+                 "\nPredecessors:\t\t" + pred_text + "\n\n";
 
         return result;
     }
