@@ -14,7 +14,7 @@ public class StorePanel extends JPanel
    private JTextArea info;
    private JFrame processes;
    
-   boolean reset;
+   boolean reset, duplicate = false;
 
    public StorePanel(ArrayList pathList) // constructor 
     {
@@ -91,11 +91,26 @@ public class StorePanel extends JPanel
 				reset = true;
 				info.setText("");
 			}
+		// Checks if input activity has the same name as existing activity, set bool
+		 for(int i = 0; i < pathList.size(); i++)
+		 {
+		 	 if(act.equals(((Activity) pathList.get(i)).getActivity()))
+		 		 {
+					 duplicate = true;
+				 }
+	  	 }
 
 		 if(act.equals("") || dur.equals("") || pred.equals(""))
 		 {
 			 msg.setText("Please enter all fields");
 			 msg.setVisible(true);
+		 }
+		 //if duplicate activity names existed, error
+		 else if(duplicate)
+		 {
+			 msg.setText("An activity by this name already exists.");
+			 msg.setVisible(true);
+			 duplicate = false;
 		 }
 		 else
 		 {
