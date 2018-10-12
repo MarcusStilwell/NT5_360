@@ -1,8 +1,12 @@
 import java.util.HashSet; 
 import java.util.List; 
 import java.util.ArrayList;
+import java.util.Arrays;
   
 public class Network { 
+	public static<T> T[] subArray(T[] array, int beg, int end) {
+		return Arrays.copyOfRange(array, beg, end + 1);
+	}
 	
    public class Node {
 	   
@@ -20,59 +24,88 @@ public class Network {
 	   
    int n_size;
    
-   Node[] adj_list;
+   ArrayList<Node> adj_list;
+   
+   ArrayList<String[]> bigList;
+   
+   int pathList_size;
    
    public Network (String[] activities) {
 		   n_size = activities.length;
-		   adj_list = new Node[n_size];
+		   adj_list = new ArrayList<Node>();
 		   for(int i = 0; i < n_size; i++) {
-			   adj_list[i].set_name(activities[i]);
+			   Node temp = new Node();
+			   temp.set_name(activities[i]);
+			   adj_list.add(temp);
 		   }
+		   bigList = new ArrayList<String[]>();
    }
    public void set_edge(String to, String from) {
 	   for(int i = 0; i < n_size; i++) {
-		   if(adj_list[i].name.equals(to)) {
-			   adj_list[i].next.add(from);
+		   if(adj_list.get(i).name.equals(to)) {
+			   System.out.println(from + " to " + to);
+			   adj_list.get(i).next.add(from);
+			   System.out.println(adj_list.get(i).next.size());
 		   }
 	   }
    }
-   public ArrayList<ArrayList<String>> get_paths(String s, String d){
+   public void get_paths(String s, String d){
 	   
 	   ArrayList<String> visited = new ArrayList<String>();
 	   
-	   ArrayList<String> pathList = new ArrayList<String>();
+	   String[] pathList = new String[1000];
+	   pathList_size = 0;
 	   
-	   ArrayList<ArrayList<String>> bigList = new ArrayList<ArrayList<String>>();
+	   pathList[pathList_size] = s;
+	   pathList_size += 1;
 	   
-	   pathList.add(s);
-	   
-	   return get_paths_help(s,d,visited,pathList,bigList);
+	   get_paths_help(s,d,visited,pathList,pathList_size);
 	   
 	   
    }
-   public ArrayList<ArrayList<String>>get_paths_help(String s, String d, ArrayList<String> visited, ArrayList<String> pathList, 
-		   ArrayList<ArrayList<String>> bigList) {
-	   ArrayList<ArrayList<String>> error = new ArrayList<ArrayList<String>>();
+   public void get_paths_help(String s, String d, ArrayList<String> visited, String[] pathList, int pathListsize) {
 	   visited.add(s);
-	   
+	   System.out.println(s);
+	   System.out.println(d);
 	   if(s.equals(d)) {
-		   bigList.add(pathList);
-		   return bigList;
+		   System.out.println("if");
+		   System.out.println("pathList size: " + pathListsize);
+		   bigList.add(subArray(pathList,0,pathListsize));
+		   System.out.println("bigList size: " + bigList.size());
+	   } else {
+		   System.out.println("else");
+		   int s_index = -1;
+		   for(int i = 0; i < adj_list.size(); i++) {
+			   if(adj_list.get(i).name.equals(s)) {
+				   s_index = i;
+			   }
+		   }
+		   System.out.println(adj_list.get(s_index).next.size());
+		   for (String i : adj_list.get(s_index).next) {
+			   System.out.println("for");
+			   if (!(visited.contains(i))) {
+				   System.out.println("adding " + i);
+				   pathList[pathListsize] = i;
+				   pathListsize += 1;
+				   System.out.println("pathList size: " + pathListsize);
+				   get_paths_help(i, d, visited, pathList, pathListsize);
+				   System.out.println("bigList after size: " + bigList.size());
+				   pathListsize -= 1;
+			   }
+			   visited.remove(visited.size()-1);
+			   System.out.println("pathList size: " + bigList.get(0).length);
+		   }
 	   }
 	   
-	   int s_index = -1;
-	   for(int i = 0; i < adj_list.length; i++) {
-		   if(adj_list[i].equals(s)) {
-			   s_index = i;
+   }
+   public String getEnd() {
+	   ArrayList<String> result = new ArrayList<String>();
+	   for(int i = 0; i < n_size; i++) {
+		   if(adj_list.get(i).next.size() == 0) {
+			   return adj_list.get(i).name;
 		   }
 	   }
-	   for (String i : adj_list[s_index].next) {
-		   if (!(visited.contains(i))) {
-			   pathList.add(i);
-			   get_paths_help(i, d, visited, pathList, bigList);
-		   }
-	   }
-	   return error;
+	   return "error";
    }
    
    

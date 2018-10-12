@@ -2,11 +2,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.Arrays;
 
 public class StorePanel extends JPanel
  {
    private ArrayList pathList;
-   private JButton add, restart, process;
+   private JButton add, restart, process, close;
    private JPanel tools, console;
    private JLabel msg, activity, duration, pred;
    private JTextField activityF, durationF, predF;
@@ -41,6 +42,9 @@ public class StorePanel extends JPanel
       
       restart = new JButton("Restart");
       restart.addActionListener(new ButtonListener());
+      
+      close = new JButton("Close");
+      close.addActionListener(new ButtonListener());
    
       tools=new JPanel();   //adding the labels and text fields to the panel
       tools.setLayout(new GridLayout(5, 2));
@@ -59,6 +63,7 @@ public class StorePanel extends JPanel
       console.add(add);
       console.add(restart);
       console.add(process);
+      console.add(close);
 
       info=new JTextArea(); //area where user can see activities added
       info.setText("No Activities");
@@ -83,6 +88,11 @@ public class StorePanel extends JPanel
          act = activityF.getText();
 		 dur = durationF.getText();
 		 String pre_text = predF.getText();
+		 if(event.getSource() == close) 
+		 {
+			 System.exit(0);
+		 }
+		 
 		 
 		 if (event.getSource() == restart) //IF THE USER HITS restart
 			{
@@ -144,8 +154,65 @@ public class StorePanel extends JPanel
 			 processes = new JFrame("Processed Paths");
 			 processes.setVisible(true);
 			 processes.setSize(300, 300);
+			 
+			 String[] activities = new String[pathList.size()];
+			 for(int i = 0; i < pathList.size(); i++) {
+				 Activity temp_activity = (Activity) pathList.get(i);
+				 activities[i] = temp_activity.getActivity();
+			 }
+			 ArrayList<PathOut> path_out_array = new ArrayList<PathOut>();
+			 Network temp = new Network(activities);
+			 for(int i = 0; i < pathList.size(); i++) {
+				 Activity temp_activity = (Activity) pathList.get(i);
+				 String from = temp_activity.getActivity();
+				 for(int k = 0; k < temp_activity.getPred().length; k++) {
+					 String to = temp_activity.getPred()[k];
+					 temp.set_edge(to, from);
+				 }
+			 }
+			 System.out.println("end is: "+temp.getEnd());
+			 temp.get_paths("a", temp.getEnd());
+			 ArrayList<String[]> result = temp.bigList;
+			 System.out.println("result size: " + result.size());
+			 for(int i = 0; i < result.size(); i++) {
+				 String temp_path = "";
+				 int temp_duration = 0;
+				 for(int k = 0; k < result.get(i).length-1; k++) {
+					 for(int j = 0; j < pathList.size(); j++) {
+						 Activity temp_activity = (Activity) pathList.get(j);
+						 if(temp_activity.getActivity().equals(result.get(i)[k])) {
+							 temp_duration += temp_activity.getDuration();
+							 temp_path += temp_activity.getActivity() + "->";
+						 }
+					 }
+					 
+				 }
+				 temp_path = temp_path.substring(0,temp_path.length()-2);
+				 PathOut temp_path_out = new PathOut(temp_path, temp_duration);
+				 path_out_array.add(temp_path_out);
+				 Collections.sort(path_out_array, new Comparator<PathOut>(){
+
+					  public int compare(PathOut o1, PathOut o2)
+					  {
+					     return o2.dur - o1.dur;
+					  }
+					});
+				 System.out.println("Path: " + temp_path);
+				 System.out.println("Duration: " + temp_duration);
+			 }
+			 String path_string = "";
+			 for(int i = 0; i < path_out_array.size(); i++) {
+				 path_string += "Path: " + path_out_array.get(i).path + "\t\t\t";
+				 path_string += "Duration: " + path_out_array.get(i).dur + "\n";
+			 }
+			 System.out.println(path_string);
+			 JTextArea path_out_area =new JTextArea();
+		     path_out_area.setText(path_string);
+		     JScrollPane scroll_path=new JScrollPane(path_out_area);
+		     processes.add(scroll_path);
+			 
 	
-			} 
+		} 
 }
 }
 }
