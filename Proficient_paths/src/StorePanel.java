@@ -6,7 +6,6 @@ import java.util.*;
 public class StorePanel extends JPanel
  {
    private ArrayList pathList;
-   private PathPanel pathPanel;
    private JButton add, restart, process;
    private JPanel tools, console;
    private JLabel msg, activity, duration, pred;
@@ -17,10 +16,9 @@ public class StorePanel extends JPanel
    
    boolean reset;
 
-   public StorePanel(ArrayList pathList, PathPanel pPanel) // constructor 
+   public StorePanel(ArrayList pathList) // constructor 
     {
       this.pathList = pathList;
-      this.pathPanel = pPanel;
       
 	  msg=new JLabel("");  //setting the message text that the user will see if something is wrong
       msg.setForeground(Color.red);
@@ -112,7 +110,6 @@ public class StorePanel extends JPanel
 				 }
 			info.append(activ.toString());
 			pathList.add(activ);
-			pathPanel.addCheckBox(activ);
 			msg.setText("Activity added");
 			msg.setVisible(true);
 			activityF.setText("");
