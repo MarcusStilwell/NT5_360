@@ -144,6 +144,34 @@ public class StorePanel extends JPanel {
 			dur = durationF.getText();
 			String pre_text = predF.getText();
 
+			
+			//******************************
+			//Edit Button
+			//******************************
+			
+			if(event.getSource() == edit)
+			{
+				//checks to see if activity exists
+				for (int i = 0; i < pathList.size(); i++) {
+					if (act.equals(((Activity) pathList.get(i)).getActivity())) {
+						editDuplicate = true;
+					}
+				}
+				//if it exists, the duration changes
+				if(editDuplicate == true)
+				{
+					msg.setText("Hello!!");
+					for(int i=0;i<pathList.size();i++)
+					{
+						Activity temp = (Activity)pathList.get(i);
+						if(temp.getActivity().equals(act) == true)
+						{
+							((Activity) pathList.get(i)).setDuration(Double.parseDouble(dur));
+							updatePrint();
+							
+						}
+					}
+				}
 			//******************************
 			//Close Button
 			//******************************
