@@ -210,6 +210,10 @@ public class StorePanel extends JPanel
 						 }else {
 							 ArrayList<String[]> result = temp.bigList;
 							 System.out.println("result size: " + result.size());
+							 if(temp.cycle) {
+								 msg.setText("cycle spotted");
+								 msg.setVisible(true);
+							 }
 							 for(int i = 0; i < result.size(); i++) {
 								 String temp_path = "";
 								 int temp_duration = 0;
@@ -223,6 +227,7 @@ public class StorePanel extends JPanel
 									 }
 									 
 								 }
+								
 								 temp_path = temp_path.substring(0,temp_path.length()-2);
 								 PathOut temp_path_out = new PathOut(temp_path, temp_duration);
 								 path_out_array.add(temp_path_out);
@@ -240,6 +245,10 @@ public class StorePanel extends JPanel
 							 for(int i = 0; i < path_out_array.size(); i++) {
 								 path_string += "Path: " + path_out_array.get(i).path + "\t\t\t";
 								 path_string += "Duration: " + path_out_array.get(i).dur + "\n";
+							 }
+							 if(result.size() == 0) {
+								 msg.setText("cycle spotted");
+								 msg.setVisible(true);
 							 }
 							 System.out.println(path_string);
 							 JTextArea path_out_area =new JTextArea();

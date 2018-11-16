@@ -96,6 +96,10 @@ public class Network {
 				   System.out.println("pathList size: " + pathListsize);
 				   get_paths_help(i, d, visited, pathList, pathListsize);
 				   System.out.println("bigList after size: " + bigList.size());
+				   if(bigList.size() == 0) {
+					   cycle = true;
+					   return;
+				   }
 				   pathListsize -= 1;
 			   }else {
 				   cycle = true;
