@@ -15,6 +15,14 @@ public class StorePanel extends JPanel {
 	private JFrame processes;
 
 	boolean reset, duplicate = false;
+	
+	public void updatePrint(ArrayList<Activity> arr) {
+        this.info.setText("");
+        for(int i = 0; i < arr.size(); i++) {
+            String temp_str = arr.get(i).toString() + "\n";
+            this.info.append(temp_str);
+        }
+    }
 
 	public StorePanel(ArrayList pathList) // constructor
 	{
@@ -161,14 +169,13 @@ public class StorePanel extends JPanel {
 				//if it exists, the duration changes
 				if(editDuplicate == true)
 				{
-					msg.setText("Hello!!");
 					for(int i=0;i<pathList.size();i++)
 					{
 						Activity temp = (Activity)pathList.get(i);
 						if(temp.getActivity().equals(act) == true)
 						{
 							((Activity) pathList.get(i)).setDuration(Double.parseDouble(dur));
-							updatePrint();
+							updatePrint(pathList);
 							
 						}
 					}
@@ -211,9 +218,16 @@ public class StorePanel extends JPanel {
 
 			// if duplicate activity names existed, error
 			else if (duplicate) {
-				msg.setText("An activity by this name already exists.");
-				msg.setVisible(true);
-				duplicate = false;
+				if(event.getSource() != edit)
+				{
+					msg.setText("An activity by this name already exists.");
+					msg.setVisible(true);
+					duplicate = false;
+				} else {
+					msg.setText("");
+					msg.setVisible(true);
+					duplicate = false;
+				}
 			}
 
 			else {
