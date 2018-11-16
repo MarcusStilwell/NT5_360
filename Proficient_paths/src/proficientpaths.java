@@ -11,7 +11,8 @@ public class proficientpaths extends JApplet
    private ArrayList pathList;
    private HelpPanel helpPanel;
    private AboutPanel aboutPanel;
-   private FilePanel filePanel;
+
+
 
    //The method init initializes the Applet with a Pane with two tabs
    public void init()
@@ -25,15 +26,13 @@ public class proficientpaths extends JApplet
      
      helpPanel = new HelpPanel();
      
-     filePanel = new FilePanel();
-
 
      //create a tabbed pane with two tabs
      tPane = new JTabbedPane();
      tPane.addTab("Store Activities", storePanel);
      tPane.addTab("About", aboutPanel);
      tPane.addTab("Help", helpPanel);
-     tPane.addTab("Create Report", filePanel);
+ 
 
      getContentPane().add(tPane);
      setSize (APPLET_WIDTH, APPLET_HEIGHT); //set Applet size
