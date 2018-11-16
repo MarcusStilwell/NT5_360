@@ -1,18 +1,34 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.FileWriter;
 import javax.swing.*;
 import java.util.*;
 import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class StorePanel extends JPanel {
 	private ArrayList pathList;
 	private JButton add, restart, process, close, edit, createFile, critPath;
 	private JPanel tools, console, buttonsR, rightSide, buttonsL, tempL, tempR;
-	private JLabel msg, activity, duration, pred;
-	private JTextField activityF, durationF, predF;
+	private JLabel msg, activity, duration, pred, title;
+	private JTextField activityF, durationF, predF, titleF;
 	private JScrollPane scroll;
 	private JTextArea info;
 	private JFrame processes;
+	public static String path_string;
+	String[] activities;
+	double[] durations;
+	//String[] alphaAct;
+
+
+	
+	FileWriter fileWriter;
+	
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	LocalDateTime now = LocalDateTime.now();
+	
 
 	boolean reset, duplicate = false;
 	
@@ -35,10 +51,13 @@ public class StorePanel extends JPanel {
 		activity = new JLabel("Activity Name:"); // creating the labels the user will see
 		duration = new JLabel("Duration:");
 		pred = new JLabel("Predecessors:");
+		title = new JLabel("Title of Report");
+		
 
 		activityF = new JTextField(); // the text fields the user can type into
 		durationF = new JTextField();
 		predF = new JTextField();
+		titleF = new JTextField();
 
 		//*******************************
 		//Creating buttons
@@ -75,6 +94,8 @@ public class StorePanel extends JPanel {
 		tools.add(durationF);
 		tools.add(pred);
 		tools.add(predF);
+		tools.add(title);
+		tools.add(titleF);
 
 		//*******************************
 		//Panel where the buttons on the left side are added (This took a lot of panels and tweaking so it wasn't ugly)
@@ -95,6 +116,7 @@ public class StorePanel extends JPanel {
 		buttonsL.add(tempR);
 		
 		
+		
 		//*******************************
 		//Panel combines error message, tools, and buttonL (Left side buttons)
 		//*******************************
@@ -103,10 +125,7 @@ public class StorePanel extends JPanel {
 		console.add(msg);
 		console.add(tools);
 		console.add(buttonsL);
-		//console.add(restart);
-		//console.add(process);
-		//console.add(close);
-		//console.add(edit);
+
 
 		//*******************************
 		//Text area and scroll for added activities
@@ -151,8 +170,45 @@ public class StorePanel extends JPanel {
 			act = activityF.getText();
 			dur = durationF.getText();
 			String pre_text = predF.getText();
-			Boolean editDuplicate = false;
+			Boolean editDuplicate = false;		
 
+			//******************************
+			//Create Report Button
+			//******************************
+			if(event.getSource() == createFile){
+				
+				durations = new double[pathList.size()];
+				
+				Arrays.sort(activities);
+				
+				for (int i = 0; i < pathList.size(); i ++){
+					Activity tempDur = (Activity) pathList.get(i);
+					durations[i] = tempDur.getDuration();
+					
+				}
+				
+				
+				try
+				{
+					fileWriter = new FileWriter(titleF.getText() + ".txt");
+					fileWriter.write(title.getText() + " : " + titleF.getText() + "\n");
+					fileWriter.write("Date and time file was created: " + dtf.format(now) + "\n");
+					fileWriter.write("All paths and their duration: " + "\n");
+					fileWriter.write(path_string);
+					fileWriter.write("Activities" + Arrays.toString(activities) + "\n");
+					fileWriter.write("Their corresponding duration: " + Arrays.toString(durations));
+					fileWriter.close();
+					JOptionPane.showMessageDialog(null, "Report Written Successfully!");
+					
+					
+				}
+				catch(Exception eve)
+				{
+					JOptionPane.showMessageDialog(null, eve+"");
+				}
+				
+			}
+			
 			
 			//******************************
 			//Edit Button
@@ -262,7 +318,7 @@ public class StorePanel extends JPanel {
 				processes.setVisible(true);
 				processes.setSize(300, 300);
 
-				String[] activities = new String[pathList.size()];
+				activities = new String[pathList.size()];
 
 				for (int i = 0; i < pathList.size(); i++) {
 					Activity temp_activity = (Activity) pathList.get(i);
@@ -353,7 +409,7 @@ public class StorePanel extends JPanel {
 									System.out.println("Duration: " + temp_duration);
 								}
 
-								String path_string = "";
+								path_string = "";
 								for (int i = 0; i < path_out_array.size(); i++) {
 									path_string += "Path: " + path_out_array.get(i).path + "\t\t\t";
 									path_string += "Duration: " + path_out_array.get(i).dur + "\n";
@@ -381,7 +437,7 @@ public class StorePanel extends JPanel {
 				processes.setVisible(true);
 				processes.setSize(300, 300);
 
-				String[] activities = new String[pathList.size()];
+				activities = new String[pathList.size()];
 
 				for (int i = 0; i < pathList.size(); i++) {
 					Activity temp_activity = (Activity) pathList.get(i);
@@ -472,7 +528,7 @@ public class StorePanel extends JPanel {
 									System.out.println("Duration: " + temp_duration);
 								}
 
-								String path_string = "";
+								path_string = "";
 								int max_dur = path_out_array.get(0).dur;
 								for (int i = 0; i < path_out_array.size(); i++) {
 									if(path_out_array.get(i).dur < max_dur) {
@@ -483,7 +539,7 @@ public class StorePanel extends JPanel {
 									
 								}
 								
-
+							
 								System.out.println(path_string);
 								JTextArea path_out_area = new JTextArea();
 								path_out_area.setText(path_string);
