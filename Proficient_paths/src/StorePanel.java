@@ -173,6 +173,11 @@ public class StorePanel extends JPanel {
 						}
 					}
 				}
+					else 
+				{
+					msg.setText("That Activity does not exist.");
+				}
+			}
 			//******************************
 			//Close Button
 			//******************************
