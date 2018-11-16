@@ -180,6 +180,13 @@ public class StorePanel extends JPanel {
 				durations = new double[pathList.size()];
 				
 				Arrays.sort(activities);
+				ArrayList<Activity> temp_activs = pathList;
+				Collections.sort(temp_activs, new Comparator<Activity>() {
+
+					public int compare(Activity o1, Activity o2) {
+						return o1.getActivity().compareTo(o2.getActivity());
+					}
+				});
 				
 				for (int i = 0; i < pathList.size(); i ++){
 					Activity tempDur = (Activity) pathList.get(i);
@@ -195,8 +202,10 @@ public class StorePanel extends JPanel {
 					fileWriter.write("Date and time file was created: " + dtf.format(now) + "\n");
 					fileWriter.write("All paths and their duration: " + "\n");
 					fileWriter.write(path_string);
-					fileWriter.write("Activities" + Arrays.toString(activities) + "\n");
-					fileWriter.write("Their corresponding duration: " + Arrays.toString(durations));
+					fileWriter.write("Activities: \n");
+					for(int i = 0; i < temp_activs.size(); i ++) {
+						fileWriter.write("Activity:" + temp_activs.get(i).getActivity() + " duration: " + temp_activs.get(i).getDuration() + "\n");
+					}
 					fileWriter.close();
 					JOptionPane.showMessageDialog(null, "Report Written Successfully!");
 					
