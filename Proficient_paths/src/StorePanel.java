@@ -322,6 +322,131 @@ public class StorePanel extends JPanel {
 					}
 				}
 			}
+			
+			//******************************
+			//CritPath Button
+			//******************************
+			if (event.getSource() == critPath) // IF THE USER HITS process
+			{
+				// creates new frame that will hold the paths with duration
+				processes = new JFrame("Processed Paths");
+				processes.setVisible(true);
+				processes.setSize(300, 300);
+
+				String[] activities = new String[pathList.size()];
+
+				for (int i = 0; i < pathList.size(); i++) {
+					Activity temp_activity = (Activity) pathList.get(i);
+					activities[i] = temp_activity.getActivity();
+				}
+
+				ArrayList<PathOut> path_out_array = new ArrayList<PathOut>();
+				Network temp = new Network(activities);
+				boolean one_start = false;
+				boolean more_than_one_start = false;
+				boolean no_start = false;
+				String start_node_string = "a";
+
+				for (int i = 0; i < pathList.size(); i++) {
+					Activity temp_activity = (Activity) pathList.get(i);
+					String from = temp_activity.getActivity();
+
+					if (temp_activity.getPred()[0].length() == 0) {
+						if (one_start == true) {
+							System.out.println("REEE");
+							more_than_one_start = true;
+						} else {
+							System.out.println("HELLLO");
+							one_start = true;
+							start_node_string = temp_activity.getActivity();
+						}
+					}
+
+					for (int k = 0; k < temp_activity.getPred().length; k++) {
+						String to = temp_activity.getPred()[k];
+						temp.set_edge(to, from);
+					}
+				}
+
+				if (one_start = false) {
+					no_start = true;
+				}
+
+				if (more_than_one_start == true || no_start == true) {
+					if (more_than_one_start == true) {
+						msg.setText("not all nodes connected");
+						msg.setVisible(true);
+					} else {
+						msg.setText("cycle spotted");
+						msg.setVisible(true);
+					}
+				} else {
+					System.out.println("end is: " + temp.getEnd());
+					ArrayList<String> ends = temp.getEnd();
+					if (temp.cycle == true) {
+						msg.setText("cycle spotted");
+						msg.setVisible(true);
+					} else {
+						for (int z = 0; z < ends.size(); z++) {
+							temp.get_paths(start_node_string, ends.get(z));
+							if (temp.cycle == true) {
+								msg.setText("cycle spotted");
+								msg.setVisible(true);
+							} else {
+								ArrayList<String[]> result = temp.bigList;
+								System.out.println("result size: " + result.size());
+								for (int i = 0; i < result.size(); i++) {
+									String temp_path = "";
+									int temp_duration = 0;
+
+									for (int k = 0; k < result.get(i).length - 1; k++) {
+										for (int j = 0; j < pathList.size(); j++) {
+											Activity temp_activity = (Activity) pathList.get(j);
+											if (temp_activity.getActivity().equals(result.get(i)[k])) {
+												temp_duration += temp_activity.getDuration();
+												temp_path += temp_activity.getActivity() + "->";
+											}
+										}
+
+									}
+
+									temp_path = temp_path.substring(0, temp_path.length() - 2);
+									PathOut temp_path_out = new PathOut(temp_path, temp_duration);
+									path_out_array.add(temp_path_out);
+									Collections.sort(path_out_array, new Comparator<PathOut>() {
+
+										public int compare(PathOut o1, PathOut o2) {
+											return o2.dur - o1.dur;
+										}
+									});
+
+									System.out.println("Path: " + temp_path);
+									System.out.println("Duration: " + temp_duration);
+								}
+
+								String path_string = "";
+								int max_dur = path_out_array.get(0).dur;
+								for (int i = 0; i < path_out_array.size(); i++) {
+									if(path_out_array.get(i).dur < max_dur) {
+										break;
+									}
+									path_string += "Critical Path: " + path_out_array.get(i).path + "\t\t";
+									path_string += "Duration: " + path_out_array.get(i).dur + "\n";
+									
+								}
+								
+
+								System.out.println(path_string);
+								JTextArea path_out_area = new JTextArea();
+								path_out_area.setText(path_string);
+								JScrollPane scroll_path = new JScrollPane(path_out_area);
+								processes.add(scroll_path);
+							}
+						}
+
+					}
+				}
+			}
 		}
 	}
 }
