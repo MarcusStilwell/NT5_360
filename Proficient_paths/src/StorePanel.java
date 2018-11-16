@@ -143,6 +143,7 @@ public class StorePanel extends JPanel {
 			act = activityF.getText();
 			dur = durationF.getText();
 			String pre_text = predF.getText();
+			Boolean editDuplicate = false;
 
 			
 			//******************************
